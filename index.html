@@ -2717,6 +2717,15 @@ body::before{
 #pairMilestoneStrip.hidden{display:none!important;}
 </style>
 
+
+<style id="pt-v67-chrome-pattern-layer">
+html,body{min-height:100%;}
+body{position:relative;background-color:var(--pt-wallpaper-color,var(--desktop,#e9e5d9))!important;}
+body::before{content:""!important;display:block!important;isolation:isolate;}
+#roomGate,#toolboxWindow{position:relative;z-index:1;}
+#toolboxWindow.window{background-image:none!important;}
+#toolboxWindow main{background-image:none!important;}
+</style>
 </head>
 <body>
   <section class="room-gate" id="roomGate" aria-label="P. Toolbox login">
@@ -11113,11 +11122,15 @@ function pairLogRecordTemplateMarkup(type){
       const gap=ptThemeHex(value.gapColor)||ptThemeHex(value.color)||PT_THEME_DEFAULT.color;
       const opacity=Math.max(5,Math.min(100,Number(value.opacity)||34))/100;
       const match=line.match(/^#([0-9a-f]{6})$/i);const n=parseInt(match?.[1]||'73806a',16);
+      // Apply opacity to the stroke only. The wallpaper layer itself stays opaque;
+      // applying opacity to both the rgba stroke and its parent made Chrome render
+      // the pattern almost invisible (opacity squared).
       const stroke=`rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${opacity.toFixed(2)})`;
-      if(value.pattern==='stripe')return `repeating-linear-gradient(90deg, ${stroke} 0 1px, transparent 1px 22px)`;
-      if(value.pattern==='grid')return `repeating-linear-gradient(0deg, ${stroke} 0 1px, transparent 1px 24px), repeating-linear-gradient(90deg, ${stroke} 0 1px, transparent 1px 24px)`;
-      if(value.pattern==='grain')return `repeating-linear-gradient(135deg, ${stroke} 0 1px, transparent 1px 10px)`;
-      if(value.pattern==='dots')return `radial-gradient(circle at 1px 1px, ${stroke} 1px, transparent 1.5px)`;
+      if(value.pattern==='stripe')return `repeating-linear-gradient(90deg, ${stroke} 0 3px, ${gap} 3px 26px)`;
+      if(value.pattern==='grid')return `repeating-linear-gradient(0deg, ${stroke} 0 2px, transparent 2px 24px), repeating-linear-gradient(90deg, ${stroke} 0 2px, transparent 2px 24px)`;
+      // Wide, continuous forward-slash bands (//), not short grain-like dashes.
+      if(value.pattern==='grain')return `repeating-linear-gradient(45deg, ${stroke} 0 3px, ${gap} 3px 30px)`;
+      if(value.pattern==='dots')return `radial-gradient(circle at 1.5px 1.5px, ${stroke} 1.35px, transparent 1.6px)`;
       return 'none';
     }
     ptThemeApply = function(value){
@@ -11128,7 +11141,7 @@ function pairLogRecordTemplateMarkup(type){
       const title=ptThemeHex(next.titlebarColor)||PT_THEME_DEFAULT.titlebarColor;
       const nav=ptThemeHex(next.navColor)||PT_THEME_DEFAULT.navColor;
       const pattern=ptThemePatternV54(next);
-      const patternSizes={grid:'24px 24px, 24px 24px',stripe:'22px 22px',grain:'10px 10px',dots:'14px 14px'};const size=patternSizes[next.pattern]||'auto';
+      const patternSizes={grid:'24px 24px, 24px 24px',dots:'14px 14px'};const size=patternSizes[next.pattern]||'auto';
       document.documentElement.style.setProperty('--pt-wallpaper-color',wallpaper);
       document.documentElement.style.setProperty('--pt-wallpaper-gap',ptThemeHex(next.gapColor)||wallpaper);
       document.documentElement.style.setProperty('--pt-window-frame-color',frame);
@@ -11934,6 +11947,38 @@ function pairMoveDdayV54(){
 }
 pairMoveDdayV54();
 
+// v67: Chrome-safe theme persistence. Every actual theme repaint is persisted,
+// not only the footer button, so changing a preset/pattern/slider survives reload.
+const ptThemeApplyV67Base=ptThemeApply;
+function ptThemePersistV67(){
+  try{
+    const snapshot={...PT_THEME_DEFAULT,...ptThemeState,saved:Array.isArray(ptThemeState.saved)?[...ptThemeState.saved]:[]};
+    const ok=saveStorage('promptToolbox.desktopTheme',snapshot);
+    if(!ok)return false;
+    // Read-after-write catches blocked or redirected storage instead of silently
+    // claiming that the setting was saved.
+    const stored=JSON.parse(localStorage.getItem(ROOM_STORAGE_PREFIX+'promptToolbox.desktopTheme')||'null');
+    if(!/^https?:$/.test(location.protocol)&&!window.__ptThemeLocalPreviewWarned){
+      window.__ptThemeLocalPreviewWarned=true;
+      setStatus('Chrome 다운로드 미리보기에서는 테마 저장이 유지되지 않을 수 있습니다. GitHub Pages HTTPS 주소에서 사용해주세요.');
+    }
+    return !!stored&&stored.pattern===snapshot.pattern&&stored.color===snapshot.color&&stored.lineColor===snapshot.lineColor;
+  }catch(error){
+    console.warn('Theme preference could not be persisted in this browser context.',error);
+    return false;
+  }
+}
+ptThemeApply=function(value){
+  const result=ptThemeApplyV67Base(value);
+  if(value&&typeof value==='object'){
+    ptThemeState={...PT_THEME_DEFAULT,...value,saved:Array.isArray(value.saved)?[...value.saved]:[]};
+  }
+  ptThemePersistV67();
+  return result;
+};
+// Re-apply once through the persistence wrapper after all v53-v66 overrides.
+ptThemeApply(ptThemeState);
+
 } 
 </script>
 
@@ -12006,8 +12051,13 @@ pairMoveDdayV54();
   };
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register(new URL('./sw.js', document.baseURI), { scope: new URL('./', document.baseURI).pathname })
-        .catch(error => console.warn('Service worker registration failed:', error));
+      navigator.serviceWorker.register(new URL('./sw.js', document.baseURI), {
+        scope: new URL('./', document.baseURI).pathname,
+        updateViaCache: 'none'
+      }).then(registration => {
+        // Chrome can otherwise continue using an HTTP-cached worker script.
+        registration.update().catch(error => console.warn('Service worker update check failed:', error));
+      }).catch(error => console.warn('Service worker registration failed:', error));
     });
   }
 })();
@@ -12995,16 +13045,22 @@ pairMoveDdayV54();
   --pt-pair-cjk-font:'Noto Sans KR','Noto Sans SC','Noto Sans TC','Noto Sans HK','Malgun Gothic','Microsoft YaHei','PingFang SC',sans-serif;
 }
 
-/* The desktop pattern belongs only to the area outside the application window. */
+/* The desktop pattern belongs only to the area outside the application window.
+   Keep the layer fully opaque and put transparency on the pattern strokes only. */
 body::before{
+  content:""!important;
+  position:fixed!important;
   z-index:0!important;
   inset:0!important;
-  background-color:var(--pt-wallpaper-color,var(--desktop))!important;
+  pointer-events:none!important;
+  background-color:var(--pt-wallpaper-gap,var(--pt-wallpaper-color,var(--desktop)))!important;
   background-image:var(--pt-wallpaper-pattern,none)!important;
-  background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;
+  background-size:var(--pt-wallpaper-pattern-size,auto)!important;
+  background-position:0 0!important;
   background-repeat:repeat!important;
-  opacity:var(--pt-wallpaper-opacity,.36)!important;
+  opacity:1!important;
   filter:blur(var(--pt-wallpaper-blur,0px))!important;
+  transform:translateZ(0);
 }
 
 /* This is the complete app window (titlebar + routebar + page), not an inner content card. */

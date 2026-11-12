@@ -1,4 +1,4 @@
-P. Toolbox v66 · Window Frame / Wallpaper Scope / CJK Font
+P. Toolbox v67 · Window Frame / Wallpaper Scope / CJK Font
 
 배포 파일:
 - index.html
@@ -31,3 +31,12 @@ LocalStorage / IndexedDB를 초기화하지 마세요.
 - ZIP 무결성 검사: 통과
 - 실제 화면 확인은 현재 실행 환경의 브라우저 탐색이 관리자 정책으로 차단되어 완료하지 못함
 - 배포 후 실제 PC/모바일 브라우저에서 테마 패턴, D-DAY 간격/무장식 옵션, 글꼴 표시를 확인해야 함
+
+
+[v67 변경 사항]
+- 테마 프리셋/색상/패턴/슬라이더 변경 즉시 저장. 새로고침 후에도 선택 상태 복원.
+- Chrome에서 패턴 투명도가 이중 적용되던 문제 수정.
+- 세로 줄무늬 선 두께 3px, 간격 26px.
+- 대각선 패턴은 끊기지 않는 긴 // 방향 밴드, 두께 3px.
+- 서비스 워커 캐시를 v67로 교체하고 Chrome의 worker script HTTP 캐시 사용을 비활성화.
+- 기존 저장 키/IndexedDB 이름/공간 분리 구조는 변경하지 않음.
