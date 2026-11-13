@@ -14,11 +14,11 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="192x192" href="./p-toolbox-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./p-toolbox-192.png">
-  <title>P. Toolbox v69 · Safe Theme Restore / Storage Guard / Route Restore</title>
+  <title>P. Toolbox v70 · Theme / Storage Repair</title>
   <style>
     :root {
       color-scheme: light;
-      --desktop: #008080;
+      --desktop: #fff6f7;
       --surface: #c0c0c0;
       --light: #ffffff;
       --mid: #808080;
@@ -497,7 +497,7 @@
     .start-destinations { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; }
     .start-destination {
       min-width:0; padding:9px; display:flex; flex-direction:column; align-items:stretch;
-      text-align:left; border:1px solid #c9a8b8; background:#fffdfb; color:#624e5c;
+      text-align:left; border:1px solid #c9a8b8; background:#fefdfb; color:#624e5c;
       box-shadow:2px 2px 0 rgba(145,101,127,.14); cursor:pointer;
     }
     .start-destination:hover { background:#fff8fb; transform:translateY(-2px); }
@@ -831,7 +831,7 @@
       place-items: center;
       overflow: auto;
       padding: 18px;
-      background: #008080;
+      background: #fff6f7;
       color: #111;
       font-family: Tahoma, Arial, sans-serif;
     }
@@ -2000,16 +2000,16 @@ body::before{content:"";position:fixed;inset:-18px;z-index:0;pointer-events:none
 
 
 /* v54: restrained controls, real wallpaper pattern, balanced pair archive. */
-:root{--pt-nav-color:#eeeae1;--pt-nav-text:#393b35;--pt-titlebar-text:#fff;--pt-nav-active:#596553}
-body::before{z-index:0!important;inset:0!important;opacity:1!important;filter:blur(var(--pt-wallpaper-blur,0px))!important;background-color:var(--pt-wallpaper-color,#e9e5d9)!important;background-image:var(--pt-wallpaper-pattern,none)!important;background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;background-repeat:repeat!important}
-#toolboxWindow.window{border-color:var(--pt-window-frame-color,#ddd9cf)!important;background-color:var(--pt-wallpaper-gap,var(--pt-window-frame-color,#ddd9cf))!important;background-image:var(--pt-window-pattern,none)!important;background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;background-repeat:repeat!important}
-#toolboxWindow .titlebar{background:var(--pt-titlebar-color,#596553)!important;color:var(--pt-titlebar-text,#fff)!important}
+:root{--pt-wallpaper-color:#fff6f7;--pt-wallpaper-pattern:repeating-linear-gradient(90deg,#eed2e0 0 3px,#fff6f7 3px 22px);--pt-wallpaper-pattern-size:auto;--pt-wallpaper-opacity:.34;--pt-wallpaper-blur:0px;--pt-window-frame-color:#c0c0c0;--pt-titlebar-color:#af5862;--pt-nav-color:#f3efe7;--pt-nav-text:#393b35;--pt-titlebar-text:#fff;--pt-nav-active:#af5862}
+body::before{z-index:0!important;inset:0!important;opacity:1!important;filter:blur(var(--pt-wallpaper-blur,0px))!important;background-color:var(--pt-wallpaper-color,#fff6f7)!important;background-image:var(--pt-wallpaper-pattern,none)!important;background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;background-repeat:repeat!important}
+#toolboxWindow.window{border-color:var(--pt-window-frame-color,#c0c0c0)!important;background-color:var(--pt-wallpaper-gap,var(--pt-window-frame-color,#c0c0c0))!important;background-image:var(--pt-window-pattern,none)!important;background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;background-repeat:repeat!important}
+#toolboxWindow .titlebar{background:var(--pt-titlebar-color,#af5862)!important;color:var(--pt-titlebar-text,#fff)!important}
 #toolboxWindow .titlebar-brand{color:var(--pt-titlebar-text,#fff)!important;text-shadow:none!important;white-space:nowrap!important;flex:0 0 auto!important;min-width:max-content!important}
 #toolboxWindow .titlebar-room-label:empty{display:none!important}
 #toolboxWindow .titlebar-room-label{color:var(--pt-titlebar-text,#fff)!important;background:color-mix(in srgb,var(--pt-titlebar-text,#fff) 10%,transparent)!important;border-radius:2px!important}
-.app-routebar{background:var(--pt-nav-color,#eeeae1)!important;color:var(--pt-nav-text,#393b35)!important;border-bottom:1px solid color-mix(in srgb,var(--pt-nav-text,#393b35) 28%,transparent)!important}
+.app-routebar{background:var(--pt-nav-color,#f3efe7)!important;color:var(--pt-nav-text,#393b35)!important;border-bottom:1px solid color-mix(in srgb,var(--pt-nav-text,#393b35) 28%,transparent)!important}
 .app-routebar .route-divider{color:color-mix(in srgb,var(--pt-nav-text,#393b35) 48%,transparent)!important}
-.app-routebar button{background:color-mix(in srgb,var(--pt-nav-color,#eeeae1) 76%,white)!important;color:var(--pt-nav-text,#393b35)!important;border:1px solid color-mix(in srgb,var(--pt-nav-text,#393b35) 34%,transparent)!important;box-shadow:none!important}
+.app-routebar button{background:color-mix(in srgb,var(--pt-nav-color,#f3efe7) 76%,white)!important;color:var(--pt-nav-text,#393b35)!important;border:1px solid color-mix(in srgb,var(--pt-nav-text,#393b35) 34%,transparent)!important;box-shadow:none!important}
 .app-routebar button.active{background:var(--pt-nav-active,var(--pt-titlebar-color))!important;color:var(--pt-titlebar-text,#fff)!important;border-color:var(--pt-nav-active,var(--pt-titlebar-color))!important}
 .pt-theme-color-note{align-self:center;color:#817b70;font-size:9px}
 /* Small, aligned reroll controls: they remain part of the selector row. */
@@ -2092,7 +2092,7 @@ body::before{z-index:0!important;inset:0!important;opacity:1!important;filter:bl
 #toolboxWindow .titlebar-room-label{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important;min-width:0!important;max-width:clamp(42px,15vw,112px)!important;opacity:.72!important}
 #toolboxWindow .titlebar-brand{color:var(--pt-titlebar-text,#30312c)!important}
 #toolboxWindow.window{background-color:var(--pt-window-frame-color,#c0c0c0)!important;border-color:var(--pt-window-frame-color,#c0c0c0)!important}
-#toolboxWindow main{position:relative;background-color:var(--pt-wallpaper-gap,var(--pt-wallpaper-color,#e9e5d9))!important;background-image:var(--pt-window-pattern,none)!important;background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;background-repeat:repeat!important;background-attachment:local!important}
+#toolboxWindow main{position:relative;background-color:var(--pt-wallpaper-gap,var(--pt-wallpaper-color,#fff6f7))!important;background-image:var(--pt-window-pattern,none)!important;background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;background-repeat:repeat!important;background-attachment:local!important}
 #toolboxWindow .tab-panel{background:transparent!important}
 #toolboxWindow .titlebar-settings,#toolboxWindow .titlebar-lock{color:#20211e!important}
 #backupDetailVersionTabs.v54-version-tabs-rail{flex-wrap:wrap!important;justify-content:flex-start!important;align-content:flex-start!important;overflow:visible!important;min-height:32px!important;gap:5px!important;padding:4px 0 8px!important;scrollbar-width:none!important}
@@ -2363,7 +2363,7 @@ body::before{z-index:0!important;inset:0!important;opacity:1!important;filter:bl
 body::before{
   z-index:0!important;
   inset:0!important;
-  background-color:var(--pt-wallpaper-color,#e9e5d9)!important;
+  background-color:var(--pt-wallpaper-color,#fff6f7)!important;
   background-image:var(--pt-wallpaper-pattern,none)!important;
   background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;
   background-repeat:repeat!important;
@@ -2720,7 +2720,7 @@ body::before{
 
 <style id="pt-v67-chrome-pattern-layer">
 html,body{min-height:100%;}
-body{position:relative;background-color:var(--pt-wallpaper-color,var(--desktop,#e9e5d9))!important;}
+body{position:relative;background-color:var(--pt-wallpaper-color,var(--desktop,#fff6f7))!important;}
 body::before{content:""!important;display:block!important;isolation:isolate;}
 #roomGate,#toolboxWindow{position:relative;z-index:1;}
 #toolboxWindow.window{background-image:none!important;}
@@ -3843,7 +3843,12 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
     'promptToolbox.outfitCustomTags',
     'promptToolbox.outfitFavorites',
     'promptToolbox.backupCategories',
-    'promptToolbox.backupEntries'
+    'promptToolbox.backupEntries',
+    'promptToolbox.backupCategoryRatios',
+    'promptToolbox.customBackupBoards',
+    'promptToolbox.desktopTheme',
+    'promptToolbox.lastView',
+    'promptToolbox.pairLogReaderSkin'
   ];
 
   function openEntriesDatabase(name) {
@@ -3937,31 +3942,94 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
 
   async function migrateLegacyData(roomKey) {
     const previousTarget = localStorage.getItem(LEGACY_MIGRATION_TARGET_KEY);
-    if (previousTarget && previousTarget !== roomKey) return;
-    // v69 performs one verified, retryable legacy scan even if an earlier release
-    // wrote the old completion marker after an IndexedDB `blocked` event.
-    const verifiedScanKey = `promptToolbox.v69.legacyScanDone.${roomKey}`;
-    if (localStorage.getItem(verifiedScanKey) === '1') return;
+    const knownRooms = readRooms();
+    const roomKeys = Object.keys(knownRooms).filter(key => knownRooms[key] && knownRooms[key].id);
+    const previousOwnerStillExists = !!(previousTarget && knownRooms[previousTarget]);
+    const allowGlobalLegacy = !previousTarget || previousTarget === roomKey ||
+      (!previousOwnerStillExists && roomKeys.length === 1 && roomKeys[0] === roomKey);
     const prefix = `promptToolbox.v28.room.${roomKey}.`;
     const v27Prefix = `promptToolbox.room.${roomKey}.`;
 
-    // Prefer an older room-specific value, then fall back to the original v26 global value.
-    // Existing values are never overwritten.
+    // Always check this room's own older namespace. A different room owning the old
+    // global namespace must not prevent this room's records from being restored.
+    function mergeLegacyStorageValueV70(key, currentRaw, legacyRaw) {
+      if (legacyRaw === null || legacyRaw === undefined) return currentRaw;
+      if (currentRaw === null || currentRaw === undefined || currentRaw === '') return legacyRaw;
+      let current, legacy;
+      try { current = JSON.parse(currentRaw); } catch (_) { current = currentRaw; }
+      try { legacy = JSON.parse(legacyRaw); } catch (_) { legacy = legacyRaw; }
+      if (Array.isArray(current) && Array.isArray(legacy)) {
+        const merged = [...current];
+        const seen = new Set(current.map(item => item && typeof item === 'object' && item.id ? `id:${item.id}` : `value:${JSON.stringify(item)}`));
+        legacy.forEach(item => {
+          const identity = item && typeof item === 'object' && item.id ? `id:${item.id}` : `value:${JSON.stringify(item)}`;
+          if (!seen.has(identity)) { merged.push(item); seen.add(identity); }
+        });
+        return JSON.stringify(merged);
+      }
+      if (current && legacy && typeof current === 'object' && typeof legacy === 'object' && !Array.isArray(current) && !Array.isArray(legacy)) {
+        const merged = { ...legacy, ...current };
+        if (key === 'promptToolbox.desktopTheme') {
+          const saved = [...(Array.isArray(current.saved) ? current.saved : []), ...(Array.isArray(legacy.saved) ? legacy.saved : [])];
+          merged.saved = [...new Set(saved)];
+        }
+        return JSON.stringify(merged);
+      }
+      if (key === 'promptToolbox.lastView') {
+        const valid = new Set(['home','randomizer','outfit','converter','backup','pair']);
+        if (current === 'home' && valid.has(String(legacy)) && legacy !== 'home') return JSON.stringify(legacy);
+      }
+      return currentRaw;
+    }
+
     LEGACY_STORAGE_KEYS.forEach(key => {
       const targetKey = prefix + key;
-      if (localStorage.getItem(targetKey) !== null) return;
+      const currentValue = localStorage.getItem(targetKey);
       const roomValue = localStorage.getItem(v27Prefix + key);
-      const globalValue = localStorage.getItem(key);
-      const value = roomValue !== null ? roomValue : globalValue;
-      if (value !== null) localStorage.setItem(targetKey, value);
+      const globalValue = allowGlobalLegacy ? localStorage.getItem(key) : null;
+      // Merge this room's older value first, then the old global value only when
+      // this room is its recorded owner. Neither source key is ever removed.
+      let mergedValue = currentValue;
+      if (roomValue !== null) mergedValue = mergeLegacyStorageValueV70(key, mergedValue, roomValue);
+      if (globalValue !== null) mergedValue = mergeLegacyStorageValueV70(key, mergedValue, globalValue);
+      if (mergedValue !== currentValue && mergedValue !== null) {
+        try { localStorage.setItem(targetKey, mergedValue); }
+        catch (error) { console.warn('Legacy setting copy was skipped without removing its source:', key, error); }
+      }
     });
 
     const targetDb = `PromptToolboxBackupLibrary_v28_${roomKey}`;
-    // Legacy DBs are read-only sources. Copy missing IDs into the active DB; never delete a source.
-    await copyDatabaseRecords('PromptToolboxBackupLibrary', targetDb);
-    await copyDatabaseRecords(`PromptToolboxBackupLibrary_${roomKey}`, targetDb);
-    localStorage.setItem(LEGACY_MIGRATION_TARGET_KEY, roomKey);
-    localStorage.setItem(verifiedScanKey, '1');
+    // Discover prior versioned database names for this exact room hash. This is
+    // room-scoped, avoids mixing other spaces, and only copies IDs into the active DB.
+    const roomDatabaseNames = new Set([`PromptToolboxBackupLibrary_${roomKey}`]);
+    try {
+      if (typeof indexedDB.databases === 'function') {
+        const databases = await indexedDB.databases();
+        databases.forEach(item => {
+          const name = String(item?.name || '');
+          if (name.startsWith('PromptToolboxBackupLibrary') && name.endsWith(roomKey) && name !== targetDb) roomDatabaseNames.add(name);
+        });
+      }
+    } catch (error) { console.warn('Could not enumerate older room database names; known legacy name will still be checked.', error); }
+    for (const sourceName of roomDatabaseNames) {
+      if (sourceName !== targetDb) await copyDatabaseRecords(sourceName, targetDb);
+    }
+    // The old global database is copied only into its original designated room.
+    if (allowGlobalLegacy) {
+      let globalDbExists = true;
+      try {
+        if (typeof indexedDB.databases === 'function') {
+          const databases = await indexedDB.databases();
+          globalDbExists = databases.some(item => item && item.name === 'PromptToolboxBackupLibrary');
+        }
+      } catch (_) { /* Keep the original non-destructive fallback on restricted browsers. */ }
+      if (globalDbExists) {
+        await copyDatabaseRecords('PromptToolboxBackupLibrary', targetDb);
+        if (!previousTarget) localStorage.setItem(LEGACY_MIGRATION_TARGET_KEY, roomKey);
+        localStorage.setItem(`promptToolbox.v70.globalLegacyScanDone.${roomKey}`, '1');
+      }
+    }
+    // No source store is cleared or deleted. Repeating this copy is safe because IDs are checked.
   }
 
   async function enterRoom(roomKey, roomId) {
@@ -7946,19 +8014,8 @@ function startPromptToolbox() {
     }
 
     async function persistBackupEntryAfterImageEdit(entry) {
-      if (backupStorageMode !== 'localStorage') {
-        try {
-          await backupDBRequest('readwrite', 'put', entry);
-          backupStorageMode = 'indexedDB';
-          return true;
-        } catch (error) { backupStorageMode = 'localStorage'; }
-      }
-      const localRecord = await makeLocalBackupRecord(entry);
-      const records = getLocalBackupRecords();
-      const index = records.findIndex(item => item.id === localRecord.id);
-      if (index >= 0) records[index] = localRecord; else records.unshift(localRecord);
-      if (!saveLocalBackupRecords(records)) throw new Error('이미지 위치를 저장하지 못했습니다.');
-      backupStorageMode = 'localStorage';
+      if (backupStorageMode !== 'indexedDB') throw new Error('기존 백업 저장소에 연결되지 않아 이미지 편집 내용을 저장하지 않았습니다.');
+      await backupDBRequest('readwrite', 'put', entry);
       return true;
     }
 
@@ -8112,6 +8169,7 @@ function startPromptToolbox() {
     }
 
     async function ptDeleteCustomBackupBoard(){
+      if(backupStorageMode!=='indexedDB'){setStatus('기존 백업 저장소가 연결되지 않아 게시판 변경을 중단했습니다.');return;}
       const id=activeBackupBoardFilter;
       const board=getCustomBackupBoards().find(item=>item.id===id);
       if(!board){setStatus('삭제할 사용자 게시판을 먼저 선택해주세요.');return;}
@@ -8119,9 +8177,7 @@ function startPromptToolbox() {
       const changed=[];
       backupEntriesData.forEach(entry=>{if(getEntryBoard(entry)===id){entry.board='general';entry.updatedAt=new Date().toISOString();changed.push(entry);}});
       try{
-        if(backupStorageMode==='indexedDB')for(const entry of changed)await backupDBRequest('readwrite','put',entry);
-        const local=getLocalBackupRecords().map(entry=>getEntryBoard(entry)===id?{...entry,board:'general',updatedAt:new Date().toISOString()}:entry);
-        saveLocalBackupRecords(local);
+        for(const entry of changed)await backupDBRequest('readwrite','put',entry);
         saveStorage('promptToolbox.customBackupBoards',getCustomBackupBoards().filter(item=>item.id!==id));
         activeBackupBoardFilter='general';renderBackupBoardTabs();renderBackupBoardSelect('general');renderBackupEntries();syncBackupDesignMode('gallery');
         setStatus(`"${board.name}" 게시판 삭제 완료. 게시글 ${changed.length}개를 GENERAL로 이동했습니다.`);
@@ -8373,23 +8429,11 @@ function applyBackupTemplate(template) {
       };
 
       try {
-        if (backupStorageMode === 'localStorage') throw new Error('Using localStorage fallback');
+        if (backupStorageMode !== 'indexedDB') throw new Error('기존 백업 저장소가 연결되지 않아 저장을 중단했습니다.');
         await backupDBRequest('readwrite', 'put', record);
-        backupStorageMode = 'indexedDB';
       } catch (error) {
-        try {
-          record = await makeLocalBackupRecord(record);
-          const records = getLocalBackupRecords();
-          const index = records.findIndex(entry => entry.id === record.id);
-          if (index >= 0) records[index] = record;
-          else records.unshift(record);
-          if (!saveLocalBackupRecords(records)) return;
-          backupStorageMode = 'localStorage';
-        } catch (fallbackError) {
-          console.error(fallbackError);
-          setStatus(`백업 저장 실패: ${fallbackError.message || '브라우저 저장 공간을 확인해주세요.'}`);
-          return;
-        }
+        setStatus(`백업 저장을 중단했습니다: ${error.message || '기존 저장소를 확인해주세요.'}`);
+        return;
       }
 
       const index = backupEntriesData.findIndex(entry => entry.id === record.id);
@@ -8399,9 +8443,7 @@ function applyBackupTemplate(template) {
       resetBackupDraft();
       showBackupView('gallery');
       renderBackupEntries();
-      setStatus(backupStorageMode === 'localStorage'
-        ? '프롬프트 백업을 브라우저 저장소에 보관했습니다.'
-        : '프롬프트 백업을 저장했습니다.');
+      setStatus('프롬프트 백업을 저장했습니다.');
     }
 
     function editBackupEntry(id) {
@@ -8432,12 +8474,8 @@ function applyBackupTemplate(template) {
       if (!entry) return;
       if (!window.confirm(`"${entry.title}" 백업을 삭제할까요?`)) return;
       try {
-        if (backupStorageMode === 'localStorage') {
-          const records = getLocalBackupRecords().filter(item => item.id !== id);
-          if (!saveLocalBackupRecords(records)) return;
-        } else {
-          await backupDBRequest('readwrite', 'delete', id);
-        }
+        if (backupStorageMode !== 'indexedDB') throw new Error('기존 백업 저장소가 연결되지 않아 삭제를 중단했습니다.');
+        await backupDBRequest('readwrite', 'delete', id);
         backupEntriesData = backupEntriesData.filter(item => item.id !== id);
         renderBackupEntries();
         if (backupEditingId === id) resetBackupDraft();
@@ -8592,20 +8630,14 @@ function applyBackupTemplate(template) {
     }
 
     async function toggleBackupPin(id) {
+      if(backupStorageMode!=='indexedDB'){setStatus('기존 백업 저장소가 연결되지 않아 고정 상태 변경을 중단했습니다.');return;}
       const entry = backupEntriesData.find(item => item.id === id);
       if (!entry) return;
       const previous = !!entry.pinned;
       entry.pinned = !previous;
       try {
-        if (backupStorageMode === 'localStorage') {
-          const records = getLocalBackupRecords();
-          const index = records.findIndex(item => item.id === id);
-          if (index < 0) throw new Error('저장된 글을 찾을 수 없습니다.');
-          records[index] = { ...records[index], pinned: entry.pinned };
-          if (!saveLocalBackupRecords(records)) throw new Error('상단 고정 상태를 저장하지 못했습니다.');
-        } else {
-          await backupDBRequest('readwrite', 'put', entry);
-        }
+        if (backupStorageMode !== 'indexedDB') throw new Error('기존 백업 저장소가 연결되지 않아 변경을 중단했습니다.');
+        await backupDBRequest('readwrite', 'put', entry);
         renderBackupEntries();
         if (backupCurrentEntryId === id && !document.getElementById('backupDetailView').classList.contains('hidden')) {
           renderBackupDetail();
@@ -9007,16 +9039,9 @@ function applyBackupTemplate(template) {
         pinned:!!existing?.pinned, createdAt:existing?.createdAt || now, updatedAt:now
       };
       try {
-        if (backupStorageMode==='localStorage') throw new Error('localStorage fallback');
-        await backupDBRequest('readwrite','put',record); backupStorageMode='indexedDB';
-      } catch (error) {
-        try {
-          record=await makeLocalBackupRecord(record);
-          const records=getLocalBackupRecords(); const index=records.findIndex(item=>item.id===record.id);
-          if(index>=0) records[index]=record; else records.unshift(record);
-          if(!saveLocalBackupRecords(records)) return; backupStorageMode='localStorage';
-        } catch(fallbackError) { setStatus(`사진 저장 실패: ${fallbackError.message || '저장 공간을 확인해주세요.'}`); return; }
-      }
+        if(backupStorageMode!=='indexedDB') throw new Error('기존 백업 저장소가 연결되지 않아 사진 저장을 중단했습니다.');
+        await backupDBRequest('readwrite','put',record);
+      } catch (error) { setStatus(`사진 저장을 중단했습니다: ${error.message || '기존 저장소를 확인해주세요.'}`); return; }
       const index=backupEntriesData.findIndex(item=>item.id===record.id);
       if(index>=0) backupEntriesData[index]=record; else backupEntriesData.unshift(record);
       resetPhotoArchiveDraft(); renderPhotoGallery(); showPhotoArchiveView('grid'); setStatus('사진 갤러리에 저장했습니다.');
@@ -9026,8 +9051,8 @@ function applyBackupTemplate(template) {
       const entry=backupEntriesData.find(item=>item.id===photoCurrentEntryId && item.kind==='photo'); if(!entry) return;
       if(!window.confirm(`"${entry.title || '사진 게시글'}"을 삭제할까요?`)) return;
       try {
-        if(backupStorageMode==='localStorage') { const records=getLocalBackupRecords().filter(item=>item.id!==entry.id); if(!saveLocalBackupRecords(records)) return; }
-        else await backupDBRequest('readwrite','delete',entry.id);
+        if(backupStorageMode!=='indexedDB') throw new Error('기존 백업 저장소가 연결되지 않아 사진 삭제를 중단했습니다.');
+        await backupDBRequest('readwrite','delete',entry.id);
         backupEntriesData=backupEntriesData.filter(item=>item.id!==entry.id); photoCurrentEntryId=null; renderPhotoGallery(); showPhotoArchiveView('grid'); setStatus('사진 게시글을 삭제했습니다.');
       } catch(error) { setStatus(`삭제 실패: ${error.message || '다시 시도해주세요.'}`); }
     }
@@ -9092,43 +9117,19 @@ function applyBackupTemplate(template) {
     function pairLogRecords(pairId) { return backupEntriesData.filter(record => record.kind === 'pair-log' && record.pairId === pairId).sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||''))); }
 
     async function saveRoomRecord(record) {
-      let stored = record;
-      if (backupStorageMode !== 'localStorage') {
-        try {
-          await backupDBRequest('readwrite', 'put', record);
-          backupStorageMode = 'indexedDB';
-        } catch (error) {
-          backupStorageMode = 'localStorage';
-        }
-      }
-      if (backupStorageMode === 'localStorage') {
-        if (record.kind === 'pair') {
-          stored = { ...record, members: await Promise.all((record.members || []).map(async member => {
-            const photo = member.photo || {};
-            let dataUrl = photo.dataUrl || '';
-            if (!dataUrl && photo.blob) dataUrl = await makeBackupImageDataUrl(photo);
-            return { name: member.name, photo: dataUrl ? { name: photo.name || 'photo', dataUrl, crop: getBackupImageCrop(photo), ratio: '3/4' } : null };
-          })) };
-        } else {
-          stored = await makeLocalBackupRecord(record);
-        }
-        const records = getLocalBackupRecords();
-        const index = records.findIndex(item => item.id === stored.id);
-        if (index >= 0) records[index] = stored; else records.unshift(stored);
-        if (!saveLocalBackupRecords(records)) throw new Error('브라우저 저장 공간이 부족합니다.');
-      }
-      const index = backupEntriesData.findIndex(item => item.id === stored.id);
-      if (index >= 0) backupEntriesData[index] = stored; else backupEntriesData.unshift(stored);
-      return stored;
+      if (backupStorageMode !== 'indexedDB') throw new Error('기존 IndexedDB 저장소가 연결되지 않았습니다. 자료가 다른 저장소로 분리되지 않도록 저장을 중단했습니다. 다시 연결한 뒤 수정해주세요.');
+      await backupDBRequest('readwrite', 'put', record);
+      const index = backupEntriesData.findIndex(item => item.id === record.id);
+      if (index >= 0) backupEntriesData[index] = record; else backupEntriesData.unshift(record);
+      return record;
     }
 
     async function deleteRoomRecord(id) {
-      if (backupStorageMode === 'localStorage') {
-        const records = getLocalBackupRecords().filter(item => item.id !== id);
-        if (!saveLocalBackupRecords(records)) throw new Error('브라우저 저장 공간이 부족합니다.');
-      } else {
-        await backupDBRequest('readwrite', 'delete', id);
+      // Never redirect an unavailable/readonly IndexedDB room into another store.
+      if (backupStorageMode !== 'indexedDB') {
+        throw new Error('기존 백업 저장소가 연결되지 않아 삭제를 중단했습니다. 자료는 그대로 보존되어 있습니다.');
       }
+      await backupDBRequest('readwrite', 'delete', id);
       backupEntriesData = backupEntriesData.filter(item => item.id !== id);
     }
 
@@ -10790,53 +10791,81 @@ function pairLogRecordTemplateMarkup(type){
       } catch(error){document.getElementById('roomJsonStatus').textContent=`가져오기 실패: ${error.message||'파일을 확인해주세요.'}`;}
     }
 
-    function hideBackupStorageWarningV69() {
-      document.getElementById('backupStorageWarningV69')?.remove();
+    async function readExistingBackupDatabaseV70(name) {
+      if (!name || !('indexedDB' in window) || typeof indexedDB.databases !== 'function') return [];
+      const known = await indexedDB.databases();
+      if (!known.some(item => item && item.name === name)) return [];
+      const db = await new Promise((resolve, reject) => {
+        const request = indexedDB.open(name);
+        let settled = false;
+        const timeoutId = setTimeout(() => {
+          if (settled) return;
+          settled = true;
+          reject(new Error('기존 저장소 연결이 12초 이상 대기 중입니다. 다른 P. Toolbox 탭을 닫고 다시 시도해주세요.'));
+        }, 12000);
+        request.onsuccess = () => {
+          if (settled) { request.result.close(); return; }
+          settled = true;
+          clearTimeout(timeoutId);
+          resolve(request.result);
+        };
+        request.onerror = () => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timeoutId);
+          reject(request.error || new Error('기존 백업 저장소를 읽지 못했습니다.'));
+        };
+        request.onblocked = () => {
+          // Wait for the connection or timeout. A late success is explicitly closed above.
+          console.warn('Legacy IndexedDB open is blocked by another tab:', name);
+        };
+      });
+      try {
+        if (!db.objectStoreNames.contains('entries')) return [];
+        return await new Promise((resolve, reject) => {
+          const transaction = db.transaction('entries', 'readonly');
+          const request = transaction.objectStore('entries').getAll();
+          request.onsuccess = () => resolve(Array.isArray(request.result) ? request.result : []);
+          request.onerror = () => reject(request.error || new Error('기존 백업 자료를 읽지 못했습니다.'));
+          transaction.onerror = () => reject(transaction.error || new Error('기존 백업 자료를 읽지 못했습니다.'));
+        });
+      } finally { db.close(); }
     }
 
-    async function showBackupStorageWarningV69(error) {
-      const anchor = document.getElementById('promptBackupSection') || document.getElementById('backupPanel');
-      if (!anchor) return;
-      let box = document.getElementById('backupStorageWarningV69');
-      if (!box) {
-        box = document.createElement('aside');
-        box.id = 'backupStorageWarningV69';
-        box.className = 'backup-storage-warning-v69';
-        box.setAttribute('role', 'alert');
-        const copy = document.createElement('div');
-        copy.className = 'backup-storage-warning-copy';
-        const title = document.createElement('strong');
-        title.textContent = '백업 저장소를 아직 읽지 못했습니다';
-        const detail = document.createElement('p');
-        detail.className = 'backup-storage-warning-detail-v69';
-        const retry = document.createElement('button');
-        retry.type = 'button';
-        retry.textContent = '저장소 다시 연결';
-        retry.addEventListener('click', async () => {
-          retry.disabled = true;
-          retry.textContent = '확인 중…';
-          // Clear only the rejected in-memory open promise. No browser data is removed.
-          backupDBPromise = null;
-          backupStorageMode = 'auto';
-          await loadBackupEntries();
-        });
-        copy.append(title, detail);
-        box.append(copy, retry);
-        anchor.prepend(box);
+    async function collectLegacyBackupRecordsV70() {
+      const names = new Set([`PromptToolboxBackupLibrary_${window.__ptRoomKey}`]);
+      const designatedRoom = localStorage.getItem(LEGACY_MIGRATION_TARGET_KEY);
+      let allowGlobal = !designatedRoom || designatedRoom === window.__ptRoomKey;
+      if (!allowGlobal) {
+        try {
+          const rooms = JSON.parse(localStorage.getItem('promptToolbox.rooms.v28') || '{}');
+          const roomKeys = Object.keys(rooms).filter(key => rooms[key] && rooms[key].id);
+          allowGlobal = !rooms[designatedRoom] && roomKeys.length === 1 && roomKeys[0] === window.__ptRoomKey;
+        } catch (_) {}
       }
-      const detail = box.querySelector('.backup-storage-warning-detail-v69');
-      let extra = '';
-      try {
-        if (indexedDB && typeof indexedDB.databases === 'function') {
-          const known = await indexedDB.databases();
-          const other = known.filter(item => item.name && item.name.startsWith('PromptToolboxBackupLibrary') && item.name !== BACKUP_DB_NAME);
-          if (other.length) extra = ` 다른 이름의 기존 백업 저장소 ${other.length}개도 발견했습니다. 자동 병합하거나 삭제하지 않았습니다.`;
+      if (typeof indexedDB.databases === 'function') {
+        const databases = await indexedDB.databases();
+        databases.forEach(item => {
+          const name = String(item?.name || '');
+          if (name.startsWith('PromptToolboxBackupLibrary') && name.endsWith(window.__ptRoomKey) && name !== BACKUP_DB_NAME) names.add(name);
+        });
+        if (allowGlobal && databases.some(item => item && item.name === 'PromptToolboxBackupLibrary')) names.add('PromptToolboxBackupLibrary');
+      } else if (allowGlobal) {
+        names.add('PromptToolboxBackupLibrary');
+      }
+      const merged = new Map();
+      for (const name of names) {
+        if (name === BACKUP_DB_NAME) continue;
+        try {
+          const records = await readExistingBackupDatabaseV70(name);
+          records.forEach(record => { if (record && record.id && !merged.has(record.id)) merged.set(record.id, record); });
+        } catch (error) {
+          // A known old DB that cannot be read is not the same as a database with zero rows.
+          // Propagate this so the UI never reports a false successful empty load.
+          throw new Error(`기존 저장소 ${name} 읽기 실패: ${error?.message || '연결 오류'}`);
         }
-      } catch (_) {}
-      detail.textContent = `IndexedDB 연결 오류: ${error?.message || '알 수 없는 오류'}. 로컬 보조 저장 자료만 표시 중일 수 있습니다. 기존 IndexedDB 자료는 삭제하지 않았습니다. 중복으로 열린 P. Toolbox 탭이 있다면 닫고 다시 연결을 눌러주세요.${extra}`;
-      const retry = box.querySelector('button');
-      retry.disabled = false;
-      retry.textContent = '저장소 다시 연결';
+      }
+      return [...merged.values()];
     }
 
     async function loadBackupEntries() {
@@ -10844,27 +10873,62 @@ function pairLogRecordTemplateMarkup(type){
         const records = await backupDBRequest('readonly', 'getAll');
         backupStorageMode = 'indexedDB';
         backupEntriesData = Array.isArray(records) ? records : [];
+        // Recover records left in the room-specific legacy store by an earlier skipped migration.
+        // This is copy-only, ID-deduplicated, and leaves every source database untouched.
+        const legacyRecords = await collectLegacyBackupRecordsV70();
+        const existingIds = new Set(backupEntriesData.map(item => item && item.id).filter(Boolean));
+        for (const legacyRecord of legacyRecords) {
+          if (!existingIds.has(legacyRecord.id)) {
+            await backupDBRequest('readwrite', 'put', legacyRecord);
+            backupEntriesData.push(legacyRecord);
+            existingIds.add(legacyRecord.id);
+          }
+        }
         const localRecords = getLocalBackupRecords();
-        const known = new Set(backupEntriesData.map(item => item.id));
-        localRecords.forEach(item => { if (!known.has(item.id)) { backupEntriesData.push(item); known.add(item.id); } });
+        const known = new Set(backupEntriesData.map(item => item && item.id).filter(Boolean));
+        // v69 could have written some posts to LocalStorage after an IndexedDB read error.
+        // Copy missing IDs into the original room database only after its read/write path works.
+        // Keep the LocalStorage source untouched so this is reversible and never destructive.
+        for (const localRecord of localRecords) {
+          if (localRecord && localRecord.id && !known.has(localRecord.id)) {
+            await backupDBRequest('readwrite', 'put', localRecord);
+            backupEntriesData.push(localRecord);
+            known.add(localRecord.id);
+          }
+        }
         backupEntriesData.sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
         renderBackupEntries();
         renderPhotoGallery();
         renderPairCards();
-        hideBackupStorageWarningV69();
-        setStatus('백업 보관함을 불러왔습니다.');
+        const legacyOwner = localStorage.getItem(LEGACY_MIGRATION_TARGET_KEY);
+        if (!backupEntriesData.length && legacyOwner && legacyOwner !== window.__ptRoomKey) {
+          setStatus('현재 공간의 보관함은 비어 있습니다. 이전 전역 보관함은 기존 공간 연결을 유지하고 있으며, 원본 데이터는 삭제하지 않았습니다.');
+        } else {
+          setStatus(`백업 보관함을 불러왔습니다. (${backupEntriesData.length}개)`);
+        }
       } catch (error) {
-        // A failed open can leave a rejected promise cached. Reset that promise so
-        // a user can retry after closing another tab or resolving a browser lock.
+        // A failed active DB read must not turn a partial LocalStorage view into the new source.
+        // Show any verifiably existing legacy records read-only; do not create or overwrite data.
         backupDBPromise = null;
-        backupStorageMode = 'localStorage';
-        backupEntriesData = getLocalBackupRecords();
-        backupEntriesData.sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
+        backupStorageMode = 'readonly';
+        const merged = new Map();
+        (Array.isArray(backupEntriesData) ? backupEntriesData : []).forEach(item => { if (item && item.id) merged.set(item.id, item); });
+        getLocalBackupRecords().forEach(item => { if (item && item.id && !merged.has(item.id)) merged.set(item.id, item); });
+        let legacyReadError = null;
+        try {
+          const legacyRecords = await collectLegacyBackupRecordsV70();
+          legacyRecords.forEach(item => { if (item && item.id && !merged.has(item.id)) merged.set(item.id, item); });
+        } catch (legacyError) { legacyReadError = legacyError; }
+        backupEntriesData = [...merged.values()].sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
         renderBackupEntries();
         renderPhotoGallery();
         renderPairCards();
-        await showBackupStorageWarningV69(error);
-        setStatus('백업 저장소를 읽지 못했습니다. 기존 IndexedDB 자료를 삭제하지 않았으며, 다시 연결해 확인할 수 있습니다.');
+        const detail = legacyReadError ? ` 이전 저장소도 아직 읽지 못했습니다: ${legacyReadError.message}` : '';
+        setStatus(backupEntriesData.length
+          ? `기존 저장소 연결에 실패해 확인 가능한 ${backupEntriesData.length}개 자료를 읽기 전용으로 표시합니다. 새 저장 위치로 변경하지 않았습니다.${detail}`
+          : `기존 저장소 연결에 실패했습니다. 빈 보관함으로 초기화하지 않았으며, 자료 저장·삭제도 중단했습니다.${detail}`);
+        console.warn('Active IndexedDB could not be loaded; existing sources were preserved.', error);
+        console.warn('Active IndexedDB could not be loaded; existing sources were preserved.', error);
       }
     }
 
@@ -11006,7 +11070,7 @@ function pairLogRecordTemplateMarkup(type){
       ['Powder Blue','#ccdbe0'],['Warm Grey','#cfcfc9'],['Butter','#e7dfb9'],['Plum Mist','#d7c8d3'],
       ['Olive','#cbd0b8'],['Charcoal','#777b78'],['Night','#555b65'],['Cream','#eee9d9']
     ];
-    const PT_THEME_DEFAULT={color:'#e9e5d9',pattern:'grid',lineColor:'#8b927d',gapColor:'#e9e5d9',titlebarColor:'#596553',frameColor:'#ddd9cf',navColor:'#eeeae1',blur:0,opacity:34,saved:[]};
+    const PT_THEME_DEFAULT={color:'#fff6f7',pattern:'stripe',lineColor:'#eed2e0',gapColor:'#fff6f7',titlebarColor:'#af5862',frameColor:'#c0c0c0',navColor:'#f3efe7',blur:0,opacity:34,saved:[]};
     let ptThemeState={...PT_THEME_DEFAULT};
     const ptThemeEl=id=>document.getElementById(id);
     function ptThemeHex(value){const m=String(value||'').trim().match(/^#?([0-9a-f]{6})$/i);return m?'#'+m[1].toLowerCase():null;}
@@ -11054,10 +11118,30 @@ function pairLogRecordTemplateMarkup(type){
       ptThemeEl(hexId)?.addEventListener('change',e=>{const c=ptThemeHex(e.target.value);if(!c){e.target.value=(ptThemeState[stateKey]||PT_THEME_DEFAULT[stateKey]).toUpperCase();return;}ptThemeEl(colorId).value=c;ptThemeState[stateKey]=c;ptThemeApply(ptThemeState);});
     }
     function ptThemeInit(){
-      try{ptThemeState={...PT_THEME_DEFAULT,...(loadStorage('promptToolbox.desktopTheme',{})||{})};}catch(_){ptThemeState={...PT_THEME_DEFAULT};}
+      try{
+        const storedTheme=loadStorage('promptToolbox.desktopTheme',null);
+        let restoredTheme=storedTheme&&typeof storedTheme==='object'?{...storedTheme}:{};
+        let migratedKnownPalette = false;
+        // Convert only known palettes shipped by the broken intermediate builds.
+        // Never replace a user's custom theme merely because one color happens to match.
+        const norm = value => ptThemeHex(value) || '';
+        const wasV69Default = !!storedTheme &&
+          norm(storedTheme.color)==='#e9e5d9' && norm(storedTheme.lineColor)==='#8b927d' &&
+          norm(storedTheme.gapColor)==='#e9e5d9' && norm(storedTheme.titlebarColor)==='#596553' &&
+          norm(storedTheme.frameColor)==='#ddd9cf' && norm(storedTheme.navColor)==='#eeeae1';
+        const wasBadReferenceRegression = !!storedTheme &&
+          norm(storedTheme.color)==='#008081' && norm(storedTheme.titlebarColor)==='#586553';
+        if(wasV69Default || wasBadReferenceRegression){
+          restoredTheme={...restoredTheme,color:'#fff6f7',lineColor:'#eed2e0',gapColor:'#fff6f7',titlebarColor:'#af5862',frameColor:'#c0c0c0',navColor:'#f3efe7'};
+          migratedKnownPalette = true;
+        }
+        ptThemeState={...PT_THEME_DEFAULT,...restoredTheme};
+      }catch(_){ptThemeState={...PT_THEME_DEFAULT};}
       ptThemeState.lineColor=ptThemeHex(ptThemeState.lineColor)||PT_THEME_DEFAULT.lineColor;
       ptThemeState.gapColor=ptThemeHex(ptThemeState.gapColor)||ptThemeHex(ptThemeState.color)||PT_THEME_DEFAULT.gapColor;
       ptThemeState.saved=Array.isArray(ptThemeState.saved)?ptThemeState.saved:[];
+      // Persist only this narrowly identified repair; ordinary startup never writes defaults.
+      if(migratedKnownPalette) saveStorage('promptToolbox.desktopTheme',ptThemeState);
       ptThemeApply(ptThemeState);ptThemeRenderPresets();ptThemeFill();
       ptThemeEl('ptThemeOpen')?.addEventListener('click',()=>{ptThemeFill();ptThemeEl('ptThemeModal').classList.remove('hidden');});
       ptThemeEl('ptThemeClose')?.addEventListener('click',()=>ptThemeEl('ptThemeModal').classList.add('hidden'));
@@ -11069,6 +11153,37 @@ function pairLogRecordTemplateMarkup(type){
       ptThemeEl('ptThemeSave')?.addEventListener('click',()=>{const c=ptThemeHex(ptThemeEl('ptThemeColor').value);if(!c)return;ptThemeState={...ptThemeState,color:c,lineColor:ptThemeHex(ptThemeEl('ptThemeLineColor').value)||PT_THEME_DEFAULT.lineColor,gapColor:ptThemeHex(ptThemeEl('ptThemeGapColor').value)||c,titlebarColor:ptThemeHex(ptThemeEl('ptThemeTitlebarColor').value)||PT_THEME_DEFAULT.titlebarColor,frameColor:ptThemeHex(ptThemeEl('ptThemeFrameColor').value)||PT_THEME_DEFAULT.frameColor,pattern:ptThemeEl('ptThemePattern').value,blur:Number(ptThemeEl('ptThemeBlur').value),opacity:Number(ptThemeEl('ptThemeOpacity').value),saved:ptThemeState.saved||[]};if(!ptThemeState.saved.includes(c)&&!PT_THEME_PRESETS.some(x=>x[1]===c))ptThemeState.saved.push(c);saveStorage('promptToolbox.desktopTheme',ptThemeState);ptThemeApply(ptThemeState);ptThemeRenderSaved();ptThemeEl('ptThemeModal').classList.add('hidden');setStatus('바탕 테마를 저장했습니다.');});
       ptThemeEl('ptThemeReset')?.addEventListener('click',()=>{ptThemeState={...PT_THEME_DEFAULT,saved:ptThemeState.saved||[]};ptThemeFill();ptThemeApply(ptThemeState);saveStorage('promptToolbox.desktopTheme',ptThemeState);});
       ptThemeEl('ptThemeModal')?.addEventListener('click',e=>{if(e.target===ptThemeEl('ptThemeModal'))ptThemeEl('ptThemeModal').classList.add('hidden');});
+
+      // Persist only after a real user interaction. ptThemeApply is also called
+      // during startup, so it must never be used as a blanket auto-save trigger.
+      const themeModal = ptThemeEl('ptThemeModal');
+      if (themeModal && themeModal.dataset.ptThemePersistBoundV70 !== '1') {
+        themeModal.dataset.ptThemePersistBoundV70 = '1';
+        const isThemeControl = target => !!target && (
+          target.matches('#ptThemeColor,#ptThemeHex,#ptThemeLineColor,#ptThemeLineHex,#ptThemeGapColor,#ptThemeGapHex,#ptThemeTitlebarColor,#ptThemeTitlebarHex,#ptThemeFrameColor,#ptThemeFrameHex,#ptThemeNavColor,#ptThemePattern,#ptThemeBlur,#ptThemeOpacity,#ptThemeSave,#ptThemeReset') ||
+          !!target.closest('.pt-theme-swatch,.pt-theme-color-chip,[data-titlebar-color]')
+        );
+        const persistThemeAfterInteraction = event => {
+          if (!isThemeControl(event.target)) return;
+          const snapshot = {
+            ...PT_THEME_DEFAULT,
+            ...ptThemeState,
+            color: ptThemeHex(ptThemeEl('ptThemeColor')?.value) || ptThemeState.color || PT_THEME_DEFAULT.color,
+            lineColor: ptThemeHex(ptThemeEl('ptThemeLineColor')?.value) || ptThemeState.lineColor || PT_THEME_DEFAULT.lineColor,
+            gapColor: ptThemeHex(ptThemeEl('ptThemeGapColor')?.value) || ptThemeState.gapColor || PT_THEME_DEFAULT.gapColor,
+            titlebarColor: ptThemeHex(ptThemeEl('ptThemeTitlebarColor')?.value) || ptThemeState.titlebarColor || PT_THEME_DEFAULT.titlebarColor,
+            frameColor: ptThemeHex(ptThemeEl('ptThemeFrameColor')?.value) || ptThemeState.frameColor || PT_THEME_DEFAULT.frameColor,
+            navColor: ptThemeHex(ptThemeEl('ptThemeNavColor')?.value) || ptThemeState.navColor || PT_THEME_DEFAULT.navColor,
+            pattern: ptThemeEl('ptThemePattern')?.value || ptThemeState.pattern || PT_THEME_DEFAULT.pattern,
+            blur: Number(ptThemeEl('ptThemeBlur')?.value ?? ptThemeState.blur ?? PT_THEME_DEFAULT.blur),
+            opacity: Number(ptThemeEl('ptThemeOpacity')?.value ?? ptThemeState.opacity ?? PT_THEME_DEFAULT.opacity),
+            saved: Array.isArray(ptThemeState.saved) ? [...ptThemeState.saved] : []
+          };
+          ptThemeState = snapshot;
+          saveStorage('promptToolbox.desktopTheme', snapshot);
+        };
+        ['input','change','click'].forEach(type => themeModal.addEventListener(type, persistThemeAfterInteraction));
+      }
     }
 
     // ===== v49 per-category photo ratio =====
@@ -11095,6 +11210,7 @@ function pairLogRecordTemplateMarkup(type){
 
     // ===== v49 custom backup category deletion =====
     async function ptDeleteBackupCategory(){
+      if(backupStorageMode!=='indexedDB'){setStatus('기존 백업 저장소가 연결되지 않아 카테고리 변경을 중단했습니다.');return;}
       const category=ptThemeEl('backupCategory')?.value||'';
       if(!category||DEFAULT_BACKUP_CATEGORIES.includes(category)){setStatus('기본 카테고리는 삭제할 수 없습니다.');return;}
       if(!confirm(`"${category}" 카테고리를 삭제할까요?\n이 카테고리에 저장된 게시글은 삭제하지 않고 "일반 프롬프트"로 이동합니다.`))return;
@@ -11104,11 +11220,7 @@ function pairLogRecordTemplateMarkup(type){
         if(entry.kind!=='photo'&&entry.category===category){entry.category=fallback;entry.updatedAt=new Date().toISOString();changed.push(entry);}
       }
       try{
-        if(backupStorageMode==='indexedDB'){
-          for(const entry of changed)await backupDBRequest('readwrite','put',entry);
-        }
-        const local=getLocalBackupRecords().map(entry=>entry.category===category?{...entry,category:fallback,updatedAt:new Date().toISOString()}:entry);
-        saveLocalBackupRecords(local);
+        for(const entry of changed)await backupDBRequest('readwrite','put',entry);
         const categories=getBackupCategories().filter(value=>value!==category);
         saveStorage('promptToolbox.backupCategories',categories);
         const ratios=ptCategoryRatioMap();delete ratios[category];saveStorage('promptToolbox.backupCategoryRatios',ratios);
@@ -11301,7 +11413,7 @@ function pairLogRecordTemplateMarkup(type){
       document.documentElement.style.setProperty('--pt-wallpaper-opacity',String(Math.max(0,Math.min(100,Number(value.opacity)||0))/100));
       document.documentElement.style.setProperty('--pt-wallpaper-line',line);document.documentElement.style.setProperty('--pt-wallpaper-gap',gap);
       document.documentElement.style.setProperty('--pt-window-frame-color',frame);document.documentElement.style.setProperty('--pt-titlebar-color',ptThemeHex(value.titlebarColor)||'#08049b');
-      document.documentElement.style.setProperty('--desktop',color);document.documentElement.style.setProperty('--surface',frame);
+      document.documentElement.style.setProperty('--desktop',color);
       document.body.style.backgroundColor=color;
     }
     function ptThemeFill(){
@@ -12219,57 +12331,15 @@ function pairMoveDdayV54(){
 }
 pairMoveDdayV54();
 
-// v69: wait until ptThemeInit has loaded the room's saved theme before
-// allowing an apply/repaint to write. This prevents the default in-memory state
-// from overwriting the saved theme during a refresh.
-let ptThemeHydratedV69 = document.readyState !== 'loading';
-const ptThemeApplyV67Base=ptThemeApply;
-function ptThemePersistV67(){
-  try{
-    const snapshot={...PT_THEME_DEFAULT,...ptThemeState,saved:Array.isArray(ptThemeState.saved)?[...ptThemeState.saved]:[]};
-    const ok=saveStorage('promptToolbox.desktopTheme',snapshot);
-    if(!ok)return false;
-    // Read-after-write catches blocked or redirected storage instead of silently
-    // claiming that the setting was saved.
-    const stored=JSON.parse(localStorage.getItem(ROOM_STORAGE_PREFIX+'promptToolbox.desktopTheme')||'null');
-    if(!/^https?:$/.test(location.protocol)&&!window.__ptThemeLocalPreviewWarned){
-      window.__ptThemeLocalPreviewWarned=true;
-      setStatus('Chrome 다운로드 미리보기에서는 테마 저장이 유지되지 않을 수 있습니다. GitHub Pages HTTPS 주소에서 사용해주세요.');
-    }
-    return !!stored&&stored.pattern===snapshot.pattern&&stored.color===snapshot.color&&stored.lineColor===snapshot.lineColor;
-  }catch(error){
-    console.warn('Theme preference could not be persisted in this browser context.',error);
-    return false;
-  }
-}
+// v70 repair: ptThemeApply only paints. Startup and first-render calls must never save defaults.
+const ptThemeApplyBaseV70=ptThemeApply;
 ptThemeApply=function(value){
-  const result=ptThemeApplyV67Base(value);
-  if(value&&typeof value==='object'){
-    ptThemeState={...PT_THEME_DEFAULT,...value,saved:Array.isArray(value.saved)?[...value.saved]:[]};
-  }
-  if (ptThemeHydratedV69) ptThemePersistV67();
+  const result=ptThemeApplyBaseV70({...PT_THEME_DEFAULT,...(value||{})});
+  // Only the broad work surface follows the reference grey. Existing cards and fields keep their CSS.
+  document.documentElement.style.setProperty('--pt-canvas-color','#C0C0C0');
   return result;
 };
-// If startup is still parsing, the theme initializer is queued for DOMContentLoaded.
-// Mark the store as hydrated only after that initializer has read the persisted value.
-const ptThemeInitV69Base = ptThemeInit;
-ptThemeInit = function(...args) {
-  const result = ptThemeInitV69Base.apply(this, args);
-  ptThemeHydratedV69 = true;
-  return result;
-};
-// v68: theme canvas scope, selective prompt replacements, and unified Pair Gallery excerpts.
-const ptThemeApplyV68Base = ptThemeApply;
-ptThemeApply = function(value) {
-  const next = { ...PT_THEME_DEFAULT, ...(value || {}) };
-  const result = ptThemeApplyV68Base(next);
-  const canvasColor = ptThemeHex(next.color) || PT_THEME_DEFAULT.color;
-  // PATTERN GAP is reserved for the wallpaper's empty stripes; it must not recolor
-  // the app's work canvas. This also prevents Chrome from showing a stale gray canvas.
-  document.documentElement.style.setProperty('--pt-canvas-color', canvasColor);
-  document.documentElement.style.setProperty('--pt-window-gap', canvasColor);
-  return result;
-};
+// Render the already loaded room theme without writing to storage.
 ptThemeApply(ptThemeState);
 
 let pairGalleryModeV68 = 'photos';
@@ -12538,7 +12608,7 @@ applyPairGalleryModeV68();
     <div class="pt-theme-row"><label for="ptThemeColor">CUSTOM COLOR <small>바탕색</small></label><input type="color" id="ptThemeColor" value="#d9d6c8"><input type="text" id="ptThemeHex" value="#D9D6C8" maxlength="7" aria-label="HEX 색상"></div>
     <div class="pt-theme-row"><label for="ptThemeTitlebarColor">WINDOW TITLE BAR <small>상단 창 포인트 색</small></label><input type="color" id="ptThemeTitlebarColor" value="#08049b"><input type="text" id="ptThemeTitlebarHex" value="#08049B" maxlength="7" aria-label="타이틀 바 HEX 색상"></div>
     <div class="pt-theme-row"><label for="ptThemeFrameColor">WINDOW FRAME <small>창 테두리 회색 바탕</small></label><input type="color" id="ptThemeFrameColor" value="#c0c0c0"><input type="text" id="ptThemeFrameHex" value="#C0C0C0" maxlength="7" aria-label="창 프레임 HEX 색상"></div>
-    <div class="pt-theme-row"><label for="ptThemeNavColor">NAVIGATION BAR <small>상단 메뉴 바탕</small></label><input type="color" id="ptThemeNavColor" value="#eeeae1"><span class="pt-theme-color-note">메뉴 배경색</span></div>
+    <div class="pt-theme-row"><label for="ptThemeNavColor">NAVIGATION BAR <small>상단 메뉴 바탕</small></label><input type="color" id="ptThemeNavColor" value="#f3efe7"><span class="pt-theme-color-note">메뉴 배경색</span></div>
     <div class="pt-theme-accent-presets" id="ptThemeAccentPresets" aria-label="타이틀 바 기본 색상"><span>기본 포인트 색</span><button type="button" data-titlebar-color="#08049b" style="--swatch:#08049b">Classic Blue</button><button type="button" data-titlebar-color="#76596d" style="--swatch:#76596d">Vintage Wine</button><button type="button" data-titlebar-color="#596b53" style="--swatch:#596b53">Sage</button><button type="button" data-titlebar-color="#a45d63" style="--swatch:#a45d63">Dusty Rose</button><button type="button" data-titlebar-color="#4e596d" style="--swatch:#4e596d">Midnight</button><button type="button" data-titlebar-color="#8a7454" style="--swatch:#8a7454">Oat Brown</button><button type="button" data-titlebar-color="#766b91" style="--swatch:#766b91">Lavender</button><button type="button" data-titlebar-color="#357f87" style="--swatch:#357f87">Petrol</button></div>
     <div class="pt-theme-row"><label for="ptThemePattern">BACKGROUND PATTERN <small>배경 패턴</small></label><select id="ptThemePattern"><option value="solid">Solid · 단색</option><option value="stripe">Vertical Stripes · 세로 줄무늬</option><option value="grid">Fine Grid · 격자</option><option value="grain">Diagonal Grain · 대각선 결</option><option value="dots">Soft Dots · 점무늬</option></select></div>
     <div class="pt-theme-row"><label for="ptThemeLineColor">PATTERN LINE <small>패턴 선 색</small></label><input type="color" id="ptThemeLineColor" value="#68745f"><input type="text" id="ptThemeLineHex" value="#68745F" maxlength="7" aria-label="패턴 선 HEX 색상"></div>
@@ -12585,7 +12655,7 @@ applyPairGalleryModeV68();
 /* Restore the v52 home canvas: wallpaper stays outside the application window. */
 #toolboxWindow main{background:var(--pt-window-gap,#f1eee5)!important;background-image:none!important}
 #toolboxWindow #homePanel{background:var(--pt-window-gap,#f1eee5)!important;padding:10px 8px!important}
-#toolboxWindow #homePanel .start-page{background:#fffdfb!important;border:1px solid #cfbbc5!important;box-shadow:3px 3px 0 rgba(115,82,101,.12)!important}
+#toolboxWindow #homePanel .start-page{background:#fefdfb!important;border:1px solid #cfbbc5!important;box-shadow:3px 3px 0 rgba(115,82,101,.12)!important}
 /* Pair detail returns to the compact framed two-column composition from v52. */
 #pairDetailView .pair-detail-card{max-width:780px!important;margin:0 auto!important;padding:11px!important;border:1px solid #cfbbc5!important;background:#fffdfb!important;box-shadow:none!important}
 #pairDetailView .pair-detail-heading{position:relative!important;isolation:isolate!important;display:block!important;min-height:0!important;margin:0 0 14px!important;padding:13px 12px 12px!important;overflow:hidden!important;text-align:center!important;border:1px dotted #d3bac6!important;background:linear-gradient(135deg,#f8eaf0,#f2e2e9)!important}
@@ -12630,7 +12700,7 @@ applyPairGalleryModeV68();
 #toolboxWindow #homePanel{background:transparent!important;padding:10px 8px!important}
 #toolboxWindow #homePanel .start-page{
   max-width:740px!important;margin:0 auto!important;padding:12px!important;
-  border:3px double #b48a9d!important;background:#fff8f4!important;
+  border:3px double #b48a9d!important;background:#fff8f5!important;
   box-shadow:inset 0 0 0 3px #fff,3px 3px 0 rgba(0,0,0,.14)!important;color:#614b59!important;
 }
 
@@ -13371,7 +13441,7 @@ applyPairGalleryModeV68();
 /* Restore the selected theme pattern on the app canvas. Earlier legacy rules set this to none. */
 #toolboxWindow main{
   position:relative!important;
-  background-color:var(--pt-window-gap,var(--pt-wallpaper-color,#e9e5d9))!important;
+  background-color:var(--pt-window-gap,var(--pt-wallpaper-color,#fff6f7))!important;
   background-image:var(--pt-window-pattern,none)!important;
   background-size:var(--pt-wallpaper-pattern-size,24px 24px)!important;
   background-repeat:repeat!important;
@@ -13622,14 +13692,28 @@ body::before{
 <style id="pt-v68-theme-scope-prompt-replace-pair-excerpts">
 /* Theme ownership: only the broad work canvas follows the selected base color.
    Pattern GAP is for desktop wallpaper lines, not for the app's interior. */
-#toolboxWindow main,
-#toolboxWindow #homePanel{
-  background-color:var(--pt-canvas-color,var(--pt-wallpaper-color,#f7f4ee))!important;
+#toolboxWindow main{
+  background-color:#C0C0C0!important;
   background-image:none!important;
 }
+#toolboxWindow #homePanel{
+  background-color:transparent!important;
+  background-image:none!important;
+}
+#toolboxWindow #homePanel .start-page{
+  background:#FEFDFB!important;
+}
 #toolboxWindow .tab-panel{background-color:transparent!important;background-image:none!important;}
+/* Reference screenshots: these two work canvases are #D2D2D2; their existing
+   intro panels, option cards, buttons, and inputs retain their own original fills. */
+#toolboxWindow #randomizerPanel,
+#toolboxWindow #outfitPanel,
+#toolboxWindow #converterPanel{
+  background-color:#D2D2D2!important;
+  background-image:none!important;
+}
 /* v69: preserve the original colors of prompt cards, option panels, and weight controls. */
-.prompt-replace-panel{margin:9px 0 10px;padding:8px;border:1px solid #b6a7b0;background:#e4e0e2;color:#51434c;}
+.prompt-replace-panel{margin:9px 0 10px;padding:8px;border:1px solid #b6a7b0;background:#D5D5D5;color:#51434c;}
 .prompt-replace-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;color:#76596d;font:700 9px Tahoma,Arial,sans-serif;letter-spacing:.08em;}
 .prompt-replace-heading span{color:#897983;font-size:8px;font-weight:normal;letter-spacing:0;}
 .prompt-replace-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;align-items:end;gap:6px;}
@@ -13674,7 +13758,6 @@ body::before{
 @media(max-width:600px){#pairDetailView .pair-gallery-mode-tabs button{flex:1;min-width:0;padding:4px 3px;font-size:7px;}.pair-category-register-row{align-items:stretch;}.pair-category-register-row button{padding:4px 6px;}}
 
 /* v69 safe-refresh storage warning; this does not alter existing card palettes. */
-.backup-storage-warning-v69{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:8px 0 12px;padding:10px 12px;border:1px solid var(--pt-window-frame-color,#c9b8c2);background:rgba(255,250,252,.96);color:#5d4b56;font-size:12px;line-height:1.5;font-family:inherit;}
 .backup-storage-warning-copy{min-width:0;}
 .backup-storage-warning-v69 strong{display:block;font-size:12px;}
 .backup-storage-warning-detail-v69{margin:4px 0 0;color:#756772;font-size:11px;line-height:1.5;overflow-wrap:anywhere;}
