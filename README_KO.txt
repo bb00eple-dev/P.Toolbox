@@ -1,4 +1,4 @@
-P. Toolbox v68 · Theme Canvas / Prompt Replacement / Pair Gallery Excerpts
+P. Toolbox v69 · Theme Canvas / Prompt Replacement / Pair Gallery Excerpts
 
 GitHub Pages 업로드용 전체 프로젝트입니다. ZIP 압축을 풀고 내부 파일을 저장소의 배포 루트에 업로드하세요.
 
@@ -30,3 +30,12 @@ GitHub Pages 업로드용 전체 프로젝트입니다. ZIP 압축을 풀고 내
 - 프롬프트 치환 함수 단위 검사: 통과
 - ZIP 무결성 검사: 생성 후 확인
 - 브라우저 기반 실제 PC/모바일 동작 검증: 관리자 정책에 의해 테스트 사이트 접속이 차단되어 미완료
+
+
+[v69 수정 사항]
+- 테마 저장 초기화 순서 오류 수정: 저장된 테마를 읽은 뒤에만 자동 저장을 허용합니다.
+- 기존 작업 카드와 가중치 입력 영역의 색상 강제 덮어쓰기를 제거했습니다.
+- IndexedDB 읽기 실패 시 기존 자료가 삭제된 것처럼 조용히 빈 목록만 보여주지 않고, 경고와 재연결 버튼을 표시합니다.
+- 마지막으로 연 탭을 공간별로 기억합니다.
+- 기존 버전의 IndexedDB가 다른 탭에 의해 잠긴 경우 즉시 실패 처리하지 않고 대기하며, 마이그레이션 실패 시 완료 표시를 기록하지 않아 다음 접속에서 안전하게 재시도합니다.
+- LocalStorage/IndexedDB 키와 데이터베이스 이름은 변경하지 않았습니다.

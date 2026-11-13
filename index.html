@@ -14,7 +14,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="192x192" href="./p-toolbox-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./p-toolbox-192.png">
-  <title>P. Toolbox v68 · Theme Canvas / Prompt Replace / Pair Excerpts</title>
+  <title>P. Toolbox v69 · Safe Theme Restore / Storage Guard / Route Restore</title>
   <style>
     :root {
       color-scheme: light;
@@ -3850,16 +3850,35 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
     return new Promise((resolve, reject) => {
       if (!('indexedDB' in window)) return reject(new Error('IndexedDB is unavailable.'));
       let created = false;
+      let settled = false;
       const request = indexedDB.open(name, 1);
+      const timeoutId = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        reject(new Error(`IndexedDB database ${name} is blocked for 12 seconds. Close other P. Toolbox tabs and refresh to retry.`));
+      }, 12000);
       request.onupgradeneeded = () => {
         created = true;
         if (!request.result.objectStoreNames.contains('entries')) {
           request.result.createObjectStore('entries', { keyPath: 'id' });
         }
       };
-      request.onsuccess = () => resolve({ db: request.result, created });
-      request.onerror = () => reject(request.error || new Error('Could not open backup database.'));
-      request.onblocked = () => reject(new Error('Backup database is blocked by another tab.'));
+      request.onsuccess = () => {
+        if (settled) { request.result.close(); return; }
+        settled = true;
+        clearTimeout(timeoutId);
+        resolve({ db: request.result, created });
+      };
+      request.onerror = () => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeoutId);
+        reject(request.error || new Error('Could not open backup database.'));
+      };
+      request.onblocked = () => {
+        // `blocked` is informational, not terminal. Keep waiting for success or timeout.
+        console.warn('IndexedDB migration read is blocked by another open tab:', name);
+      };
     });
   }
 
@@ -3883,7 +3902,10 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
     }
     let sourceInfo;
     try { sourceInfo = await openEntriesDatabase(sourceName); }
-    catch (error) { console.warn('Legacy database could not be opened:', sourceName, error); return 0; }
+    catch (error) {
+      console.warn('Legacy database could not be opened; migration remains retryable:', sourceName, error);
+      throw error;
+    }
     const source = sourceInfo.db;
     try {
       const records = await readEntryRecords(source);
@@ -3916,10 +3938,15 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
   async function migrateLegacyData(roomKey) {
     const previousTarget = localStorage.getItem(LEGACY_MIGRATION_TARGET_KEY);
     if (previousTarget && previousTarget !== roomKey) return;
+    // v69 performs one verified, retryable legacy scan even if an earlier release
+    // wrote the old completion marker after an IndexedDB `blocked` event.
+    const verifiedScanKey = `promptToolbox.v69.legacyScanDone.${roomKey}`;
+    if (localStorage.getItem(verifiedScanKey) === '1') return;
     const prefix = `promptToolbox.v28.room.${roomKey}.`;
     const v27Prefix = `promptToolbox.room.${roomKey}.`;
 
     // Prefer an older room-specific value, then fall back to the original v26 global value.
+    // Existing values are never overwritten.
     LEGACY_STORAGE_KEYS.forEach(key => {
       const targetKey = prefix + key;
       if (localStorage.getItem(targetKey) !== null) return;
@@ -3930,10 +3957,11 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
     });
 
     const targetDb = `PromptToolboxBackupLibrary_v28_${roomKey}`;
-    // The original v26 database is deliberately read-only; the v27 room DB is also copied, never deleted.
+    // Legacy DBs are read-only sources. Copy missing IDs into the active DB; never delete a source.
     await copyDatabaseRecords('PromptToolboxBackupLibrary', targetDb);
     await copyDatabaseRecords(`PromptToolboxBackupLibrary_${roomKey}`, targetDb);
     localStorage.setItem(LEGACY_MIGRATION_TARGET_KEY, roomKey);
+    localStorage.setItem(verifiedScanKey, '1');
   }
 
   async function enterRoom(roomKey, roomId) {
@@ -3969,6 +3997,9 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
       window.__promptToolboxStarted = true;
       startPromptToolbox();
     }
+    // v69: signal the independent navigation layer only after the active room key
+    // and its app shell are ready. This does not touch any archive records.
+    document.dispatchEvent(new CustomEvent('pt:roomready', { detail: { roomKey } }));
 
     // Recovery-code issuance must never invalidate the remembered session.
     const currentRoom = readRooms()[roomKey];
@@ -7692,15 +7723,36 @@ function startPromptToolbox() {
           return;
         }
         const request = indexedDB.open(BACKUP_DB_NAME, BACKUP_DB_VERSION);
+        let settled = false;
+        const timeoutId = setTimeout(() => {
+          if (settled) return;
+          settled = true;
+          reject(new Error('IndexedDB 연결이 12초 이상 대기 중입니다. 다른 P. Toolbox 탭을 닫은 뒤 저장소 다시 연결을 눌러주세요. 기존 자료는 삭제하지 않았습니다.'));
+        }, 12000);
         request.onupgradeneeded = () => {
           const db = request.result;
           if (!db.objectStoreNames.contains('entries')) {
             db.createObjectStore('entries', { keyPath: 'id' });
           }
         };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error || new Error('백업 저장소를 열 수 없습니다.'));
-        request.onblocked = () => reject(new Error('다른 창에서 백업 저장소를 사용 중입니다. 다른 P. Toolbox 창을 닫아주세요.'));
+        request.onsuccess = () => {
+          // A timed-out blocked open request can still succeed later. Close that
+          // late connection so it cannot hold a lock or interfere with retry.
+          if (settled) { request.result.close(); return; }
+          settled = true;
+          clearTimeout(timeoutId);
+          resolve(request.result);
+        };
+        request.onerror = () => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timeoutId);
+          reject(request.error || new Error('백업 저장소를 열 수 없습니다.'));
+        };
+        request.onblocked = () => {
+          if (!settled) setStatus('Chrome에서 다른 P. Toolbox 탭이 백업 저장소를 사용 중입니다. 탭을 닫으면 자동으로 다시 연결될 수 있습니다.');
+          // `blocked` is not a terminal error. Wait for `onsuccess` or timeout.
+        };
       });
       return backupDBPromise;
     }
@@ -10738,6 +10790,55 @@ function pairLogRecordTemplateMarkup(type){
       } catch(error){document.getElementById('roomJsonStatus').textContent=`가져오기 실패: ${error.message||'파일을 확인해주세요.'}`;}
     }
 
+    function hideBackupStorageWarningV69() {
+      document.getElementById('backupStorageWarningV69')?.remove();
+    }
+
+    async function showBackupStorageWarningV69(error) {
+      const anchor = document.getElementById('promptBackupSection') || document.getElementById('backupPanel');
+      if (!anchor) return;
+      let box = document.getElementById('backupStorageWarningV69');
+      if (!box) {
+        box = document.createElement('aside');
+        box.id = 'backupStorageWarningV69';
+        box.className = 'backup-storage-warning-v69';
+        box.setAttribute('role', 'alert');
+        const copy = document.createElement('div');
+        copy.className = 'backup-storage-warning-copy';
+        const title = document.createElement('strong');
+        title.textContent = '백업 저장소를 아직 읽지 못했습니다';
+        const detail = document.createElement('p');
+        detail.className = 'backup-storage-warning-detail-v69';
+        const retry = document.createElement('button');
+        retry.type = 'button';
+        retry.textContent = '저장소 다시 연결';
+        retry.addEventListener('click', async () => {
+          retry.disabled = true;
+          retry.textContent = '확인 중…';
+          // Clear only the rejected in-memory open promise. No browser data is removed.
+          backupDBPromise = null;
+          backupStorageMode = 'auto';
+          await loadBackupEntries();
+        });
+        copy.append(title, detail);
+        box.append(copy, retry);
+        anchor.prepend(box);
+      }
+      const detail = box.querySelector('.backup-storage-warning-detail-v69');
+      let extra = '';
+      try {
+        if (indexedDB && typeof indexedDB.databases === 'function') {
+          const known = await indexedDB.databases();
+          const other = known.filter(item => item.name && item.name.startsWith('PromptToolboxBackupLibrary') && item.name !== BACKUP_DB_NAME);
+          if (other.length) extra = ` 다른 이름의 기존 백업 저장소 ${other.length}개도 발견했습니다. 자동 병합하거나 삭제하지 않았습니다.`;
+        }
+      } catch (_) {}
+      detail.textContent = `IndexedDB 연결 오류: ${error?.message || '알 수 없는 오류'}. 로컬 보조 저장 자료만 표시 중일 수 있습니다. 기존 IndexedDB 자료는 삭제하지 않았습니다. 중복으로 열린 P. Toolbox 탭이 있다면 닫고 다시 연결을 눌러주세요.${extra}`;
+      const retry = box.querySelector('button');
+      retry.disabled = false;
+      retry.textContent = '저장소 다시 연결';
+    }
+
     async function loadBackupEntries() {
       try {
         const records = await backupDBRequest('readonly', 'getAll');
@@ -10750,15 +10851,20 @@ function pairLogRecordTemplateMarkup(type){
         renderBackupEntries();
         renderPhotoGallery();
         renderPairCards();
+        hideBackupStorageWarningV69();
         setStatus('백업 보관함을 불러왔습니다.');
       } catch (error) {
+        // A failed open can leave a rejected promise cached. Reset that promise so
+        // a user can retry after closing another tab or resolving a browser lock.
+        backupDBPromise = null;
         backupStorageMode = 'localStorage';
         backupEntriesData = getLocalBackupRecords();
         backupEntriesData.sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
         renderBackupEntries();
         renderPhotoGallery();
         renderPairCards();
-        setStatus('IndexedDB를 사용할 수 없어 브라우저 로컬 저장소로 전환했습니다.');
+        await showBackupStorageWarningV69(error);
+        setStatus('백업 저장소를 읽지 못했습니다. 기존 IndexedDB 자료를 삭제하지 않았으며, 다시 연결해 확인할 수 있습니다.');
       }
     }
 
@@ -12113,8 +12219,10 @@ function pairMoveDdayV54(){
 }
 pairMoveDdayV54();
 
-// v67: Chrome-safe theme persistence. Every actual theme repaint is persisted,
-// not only the footer button, so changing a preset/pattern/slider survives reload.
+// v69: wait until ptThemeInit has loaded the room's saved theme before
+// allowing an apply/repaint to write. This prevents the default in-memory state
+// from overwriting the saved theme during a refresh.
+let ptThemeHydratedV69 = document.readyState !== 'loading';
 const ptThemeApplyV67Base=ptThemeApply;
 function ptThemePersistV67(){
   try{
@@ -12139,7 +12247,15 @@ ptThemeApply=function(value){
   if(value&&typeof value==='object'){
     ptThemeState={...PT_THEME_DEFAULT,...value,saved:Array.isArray(value.saved)?[...value.saved]:[]};
   }
-  ptThemePersistV67();
+  if (ptThemeHydratedV69) ptThemePersistV67();
+  return result;
+};
+// If startup is still parsing, the theme initializer is queued for DOMContentLoaded.
+// Mark the store as hydrated only after that initializer has read the persisted value.
+const ptThemeInitV69Base = ptThemeInit;
+ptThemeInit = function(...args) {
+  const result = ptThemeInitV69Base.apply(this, args);
+  ptThemeHydratedV69 = true;
   return result;
 };
 // v68: theme canvas scope, selective prompt replacements, and unified Pair Gallery excerpts.
@@ -12309,7 +12425,10 @@ applyPairGalleryModeV68();
 // Independent navigation layer: remains active even if a toolbox module throws during startup.
 (() => {
   const validViews = new Set(['home', 'randomizer', 'outfit', 'converter', 'backup', 'pair']);
-  function navigate(view) {
+  const routeStorageKey = () => window.__ptRoomKey
+    ? `promptToolbox.v28.room.${window.__ptRoomKey}.promptToolbox.lastView`
+    : null;
+  function navigate(view, persist = true) {
     if (!validViews.has(view)) return;
     const panel = document.getElementById(view + 'Panel');
     if (!panel) return;
@@ -12317,10 +12436,23 @@ applyPairGalleryModeV68();
     const routebar = document.getElementById('appRoutebar');
     if (routebar) routebar.classList.toggle('hidden', view === 'home');
     document.querySelectorAll('[data-route]').forEach(el => el.classList.toggle('active', el.dataset.route === view));
+    if (persist) {
+      const key = routeStorageKey();
+      if (key) { try { localStorage.setItem(key, view); } catch (error) { console.warn('Could not persist the current room tab.', error); } }
+    }
     if (view === 'home') window.scrollTo({top: 0, behavior: 'smooth'});
     else window.scrollTo({top: 0, behavior: 'instant'});
     document.dispatchEvent(new CustomEvent('pt:routechange', {detail: {view}}));
   }
+  function restoreLastRoomView() {
+    const key = routeStorageKey();
+    if (!key || !window.__promptToolboxStarted) return;
+    try {
+      const view = localStorage.getItem(key);
+      if (validViews.has(view)) navigate(view, false);
+    } catch (error) { console.warn('Could not restore the previous room tab.', error); }
+  }
+  document.addEventListener('pt:roomready', restoreLastRoomView);
   document.addEventListener('click', event => {
     const trigger = event.target.closest('[data-open-view], [data-route]');
     if (!trigger) return;
@@ -12329,6 +12461,7 @@ applyPairGalleryModeV68();
     event.preventDefault();
     navigate(view);
   }, true);
+  restoreLastRoomView();
 })();
 </script>
 
@@ -13495,18 +13628,7 @@ body::before{
   background-image:none!important;
 }
 #toolboxWindow .tab-panel{background-color:transparent!important;background-image:none!important;}
-/* Keep functional Windows-like surfaces neutral when a theme color changes. */
-#toolboxWindow .intro{background:#d5d5d5!important;}
-#toolboxWindow .settings-panel{background:#d0d0d0!important;}
-#toolboxWindow .category-card{background:#d2d2d2!important;}
-#toolboxWindow .category-card.action-card{background:#c8c8d8!important;}
-#toolboxWindow .output-section,#toolboxWindow .subsection{background:#d0d0d0!important;}
-#toolboxWindow .prompt-editor-note{background:#e2e2e2!important;}
-#toolboxWindow .prompt-item-row{background:#d4d4d4!important;}
-#toolboxWindow .prompt-item-row.disabled{background:#c4c4c4!important;}
-#toolboxWindow .prompt-item-text,#toolboxWindow .prompt-item-translation,#toolboxWindow .prompt-item-weight input,
-#toolboxWindow #weightInput,#toolboxWindow #weightOutput{background:#fff!important;color:#111!important;}
-#toolboxWindow .weight-group-mode{background:#f7f4f6!important;}
+/* v69: preserve the original colors of prompt cards, option panels, and weight controls. */
 .prompt-replace-panel{margin:9px 0 10px;padding:8px;border:1px solid #b6a7b0;background:#e4e0e2;color:#51434c;}
 .prompt-replace-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;color:#76596d;font:700 9px Tahoma,Arial,sans-serif;letter-spacing:.08em;}
 .prompt-replace-heading span{color:#897983;font-size:8px;font-weight:normal;letter-spacing:0;}
@@ -13550,7 +13672,18 @@ body::before{
 .pair-photo-source-footer{display:flex;justify-content:flex-end;align-items:baseline;flex-wrap:wrap;gap:5px;margin:15px 3px 0;padding-top:7px;border-top:1px dotted #e2d7dc;color:#b0a1a8;font:7px/1.4 Tahoma,Arial,sans-serif;letter-spacing:.07em;}
 .pair-photo-source-footer a,.pair-photo-source-footer span:last-child{max-width:100%;overflow-wrap:anywhere;color:#a58e9a;font:7px/1.4 Tahoma,Arial,sans-serif;text-decoration:underline;text-underline-offset:2px;}
 @media(max-width:600px){#pairDetailView .pair-gallery-mode-tabs button{flex:1;min-width:0;padding:4px 3px;font-size:7px;}.pair-category-register-row{align-items:stretch;}.pair-category-register-row button{padding:4px 6px;}}
+
+/* v69 safe-refresh storage warning; this does not alter existing card palettes. */
+.backup-storage-warning-v69{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:8px 0 12px;padding:10px 12px;border:1px solid var(--pt-window-frame-color,#c9b8c2);background:rgba(255,250,252,.96);color:#5d4b56;font-size:12px;line-height:1.5;font-family:inherit;}
+.backup-storage-warning-copy{min-width:0;}
+.backup-storage-warning-v69 strong{display:block;font-size:12px;}
+.backup-storage-warning-detail-v69{margin:4px 0 0;color:#756772;font-size:11px;line-height:1.5;overflow-wrap:anywhere;}
+.backup-storage-warning-v69 button{flex:0 0 auto;min-height:30px;padding:5px 9px;border:1px solid var(--pt-window-frame-color,#b8a6b1);background:#fff;color:#5d4b56;cursor:pointer;}
+.backup-storage-warning-v69 button:disabled{opacity:.65;cursor:wait;}
+@media(max-width:600px){.backup-storage-warning-v69{flex-direction:column;}.backup-storage-warning-v69 button{width:100%;}}
 </style>
+
+
 
 </body>
 </html>
