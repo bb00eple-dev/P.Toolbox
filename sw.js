@@ -1,4 +1,4 @@
-const CACHE_NAME = 'p-toolbox-shell-v70';
+const CACHE_NAME = 'p-toolbox-shell-v71';
 const SHELL_FILES = [
   './',
   './index.html',
@@ -11,7 +11,7 @@ const SHELL_FILES = [
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
-    // v69: new namespace forces Chrome to fetch the safe-refresh build and avoid a stale app shell.
+    // v71: refresh the app shell after fixing startup order and storage loading.
     // If one optional shell URL fails, keep install alive and cache the remaining files.
     await Promise.all(SHELL_FILES.map(async path => {
       try { await cache.add(path); } catch (error) { console.warn('PWA shell asset was not cached:', path, error); }

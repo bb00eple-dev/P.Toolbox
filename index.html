@@ -14,7 +14,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="192x192" href="./p-toolbox-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./p-toolbox-192.png">
-  <title>P. Toolbox v70 · Theme / Storage Repair</title>
+  <title>P. Toolbox v71 · Startup / Theme / Storage Continuity</title>
   <style>
     :root {
       color-scheme: light;
@@ -4062,8 +4062,16 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
     gate.style.visibility = '';
     app.style.display = 'block';
     if (!window.__promptToolboxStarted) {
-      window.__promptToolboxStarted = true;
-      startPromptToolbox();
+      try {
+        startPromptToolbox();
+        window.__promptToolboxStarted = true;
+      } catch (error) {
+        window.__promptToolboxStarted = false;
+        app.style.display = 'none';
+        gate.hidden = false;
+        gate.style.visibility = 'visible';
+        throw error;
+      }
     }
     // v69: signal the independent navigation layer only after the active room key
     // and its app shell are ready. This does not touch any archive records.
@@ -4181,6 +4189,13 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
   // Non-destructive readiness: no old localStorage keys or IndexedDB databases are deleted.
   const cleanupReady = Promise.resolve(true);
   cleanupReady.then(async () => {
+    // The auth script is parsed before the core application script. A resolved
+    // promise runs at the end of this script, before the parser reaches the next
+    // script tag. Wait for DOMContentLoaded so startPromptToolbox is defined
+    // before a remembered room is opened.
+    if (document.readyState === 'loading') {
+      await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
+    }
     const candidates = [REMEMBERED_ROOM_FALLBACK_KEY, REMEMBERED_ROOM_KEY];
     let remembered = null;
     for (const key of candidates) {
@@ -4287,6 +4302,9 @@ body::before{content:""!important;display:block!important;isolation:isolate;}
 <script>
 function startPromptToolbox() {
   const ROOM_STORAGE_PREFIX = `promptToolbox.v28.room.${window.__ptRoomKey}.`;
+  // This key is declared inside the separate room-auth IIFE as well; that
+  // binding is not visible to this script's function scope.
+  const LEGACY_MIGRATION_TARGET_KEY = 'promptToolbox.v32.legacyMigrationTarget';
 
     // 카테고리별 태그 데이터입니다. 필요할 때 이 목록에 항목을 추가할 수 있습니다.
     const categoryData = {
@@ -10868,67 +10886,81 @@ function pairLogRecordTemplateMarkup(type){
       return [...merged.values()];
     }
 
-    async function loadBackupEntries() {
+    async function loadBackupEntries(retryAttempt = 0) {
       try {
         const records = await backupDBRequest('readonly', 'getAll');
         backupStorageMode = 'indexedDB';
         backupEntriesData = Array.isArray(records) ? records : [];
-        // Recover records left in the room-specific legacy store by an earlier skipped migration.
-        // This is copy-only, ID-deduplicated, and leaves every source database untouched.
-        const legacyRecords = await collectLegacyBackupRecordsV70();
+
+        // Legacy recovery is optional after the active room database has opened.
+        // A legacy DB lock must never demote a healthy active DB to read-only.
+        let legacyRecords = [];
+        let legacyScanError = null;
+        try {
+          legacyRecords = await collectLegacyBackupRecordsV70();
+        } catch (error) {
+          legacyScanError = error;
+          console.warn('Legacy backup scan deferred; active room database remains writable.', error);
+        }
+
         const existingIds = new Set(backupEntriesData.map(item => item && item.id).filter(Boolean));
+        let recordMergeWarning = false;
         for (const legacyRecord of legacyRecords) {
-          if (!existingIds.has(legacyRecord.id)) {
-            await backupDBRequest('readwrite', 'put', legacyRecord);
-            backupEntriesData.push(legacyRecord);
-            existingIds.add(legacyRecord.id);
+          if (legacyRecord && legacyRecord.id && !existingIds.has(legacyRecord.id)) {
+            try {
+              await backupDBRequest('readwrite', 'put', legacyRecord);
+              backupEntriesData.push(legacyRecord);
+              existingIds.add(legacyRecord.id);
+            } catch (error) {
+              recordMergeWarning = true;
+              console.warn('A legacy record was not copied; the active room database remains connected.', error);
+            }
           }
         }
+
+        // Reconcile only records previously written to this same room's local fallback.
+        // Keep the source list intact; a single bad fallback record must not demote the active DB.
         const localRecords = getLocalBackupRecords();
-        const known = new Set(backupEntriesData.map(item => item && item.id).filter(Boolean));
-        // v69 could have written some posts to LocalStorage after an IndexedDB read error.
-        // Copy missing IDs into the original room database only after its read/write path works.
-        // Keep the LocalStorage source untouched so this is reversible and never destructive.
         for (const localRecord of localRecords) {
-          if (localRecord && localRecord.id && !known.has(localRecord.id)) {
-            await backupDBRequest('readwrite', 'put', localRecord);
-            backupEntriesData.push(localRecord);
-            known.add(localRecord.id);
+          if (localRecord && localRecord.id && !existingIds.has(localRecord.id)) {
+            try {
+              await backupDBRequest('readwrite', 'put', localRecord);
+              backupEntriesData.push(localRecord);
+              existingIds.add(localRecord.id);
+            } catch (error) {
+              recordMergeWarning = true;
+              console.warn('A fallback record was not copied; the active room database remains connected.', error);
+            }
           }
         }
+
         backupEntriesData.sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
         renderBackupEntries();
         renderPhotoGallery();
         renderPairCards();
+
         const legacyOwner = localStorage.getItem(LEGACY_MIGRATION_TARGET_KEY);
         if (!backupEntriesData.length && legacyOwner && legacyOwner !== window.__ptRoomKey) {
-          setStatus('현재 공간의 보관함은 비어 있습니다. 이전 전역 보관함은 기존 공간 연결을 유지하고 있으며, 원본 데이터는 삭제하지 않았습니다.');
+          setStatus('현재 공간의 보관함은 비어 있습니다. 이전 전역 보관함은 원래 공간에 보존되어 있습니다.');
+        } else if (legacyScanError || recordMergeWarning) {
+          setStatus(`현재 보관함 ${backupEntriesData.length}개를 불러왔습니다. 일부 이전 자료는 원본을 유지하고 다음 접속 때 다시 확인합니다.`);
         } else {
           setStatus(`백업 보관함을 불러왔습니다. (${backupEntriesData.length}개)`);
         }
       } catch (error) {
-        // A failed active DB read must not turn a partial LocalStorage view into the new source.
-        // Show any verifiably existing legacy records read-only; do not create or overwrite data.
+        // Never switch to a LocalStorage-only or read-only mode. Re-open the SAME
+        // room DB after a short delay; no source DB, key, or record is deleted.
         backupDBPromise = null;
-        backupStorageMode = 'readonly';
-        const merged = new Map();
-        (Array.isArray(backupEntriesData) ? backupEntriesData : []).forEach(item => { if (item && item.id) merged.set(item.id, item); });
-        getLocalBackupRecords().forEach(item => { if (item && item.id && !merged.has(item.id)) merged.set(item.id, item); });
-        let legacyReadError = null;
-        try {
-          const legacyRecords = await collectLegacyBackupRecordsV70();
-          legacyRecords.forEach(item => { if (item && item.id && !merged.has(item.id)) merged.set(item.id, item); });
-        } catch (legacyError) { legacyReadError = legacyError; }
-        backupEntriesData = [...merged.values()].sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
-        renderBackupEntries();
-        renderPhotoGallery();
-        renderPairCards();
-        const detail = legacyReadError ? ` 이전 저장소도 아직 읽지 못했습니다: ${legacyReadError.message}` : '';
-        setStatus(backupEntriesData.length
-          ? `기존 저장소 연결에 실패해 확인 가능한 ${backupEntriesData.length}개 자료를 읽기 전용으로 표시합니다. 새 저장 위치로 변경하지 않았습니다.${detail}`
-          : `기존 저장소 연결에 실패했습니다. 빈 보관함으로 초기화하지 않았으며, 자료 저장·삭제도 중단했습니다.${detail}`);
-        console.warn('Active IndexedDB could not be loaded; existing sources were preserved.', error);
-        console.warn('Active IndexedDB could not be loaded; existing sources were preserved.', error);
+        backupStorageMode = 'auto';
+        if (retryAttempt < 5) {
+          const wait = 500 + retryAttempt * 700;
+          setStatus(`기존 백업 저장소에 다시 연결하고 있습니다 (${retryAttempt + 1}/5)…`);
+          setTimeout(() => loadBackupEntries(retryAttempt + 1), wait);
+          console.warn('Retrying the existing room backup database without changing storage.', error);
+          return;
+        }
+        setStatus('기존 백업 저장소에 연결하지 못했습니다. 다른 저장소로 전환하거나 자료를 초기화하지 않았습니다. 다른 P. Toolbox 탭을 닫고 다시 접속해 주세요.');
+        console.error('Could not open the existing room backup database after retries.', error);
       }
     }
 
@@ -11118,10 +11150,10 @@ function pairLogRecordTemplateMarkup(type){
       ptThemeEl(hexId)?.addEventListener('change',e=>{const c=ptThemeHex(e.target.value);if(!c){e.target.value=(ptThemeState[stateKey]||PT_THEME_DEFAULT[stateKey]).toUpperCase();return;}ptThemeEl(colorId).value=c;ptThemeState[stateKey]=c;ptThemeApply(ptThemeState);});
     }
     function ptThemeInit(){
+      let migratedKnownPalette = false;
       try{
         const storedTheme=loadStorage('promptToolbox.desktopTheme',null);
         let restoredTheme=storedTheme&&typeof storedTheme==='object'?{...storedTheme}:{};
-        let migratedKnownPalette = false;
         // Convert only known palettes shipped by the broken intermediate builds.
         // Never replace a user's custom theme merely because one color happens to match.
         const norm = value => ptThemeHex(value) || '';
